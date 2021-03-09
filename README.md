@@ -29,8 +29,8 @@ $ php artisan migrate:refresh --seed
 ```
 
 ### Login
-email   : admin@sales.dev
-password: admin
+- email   : admin@sales.dev
+- password: admin
 
 **Note**
 Untuk mengubah default user dapat dilakukan di file database/seeds/usersTableSeeder.php dan harus dilakukan sebelum melakukan migrate
