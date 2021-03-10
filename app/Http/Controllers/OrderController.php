@@ -142,6 +142,8 @@ class OrderController extends Controller
                 'message' => 'Proses order telah berhasil'
             ];
 
+            $request->session()->forget('order');
+
             //send email ke customer
             Mail::to($request->input('email'))->send(new InvoiceMail($order->load('orderDetails', 'customer')));
         }catch(Exception $e){
