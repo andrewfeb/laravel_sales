@@ -30,6 +30,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('order/customer', 'OrderController@getCustomer')->name('order.getCustomer');
     Route::get('order/product', 'OrderController@getProduct')->name('order.getProduct');
     Route::post('order', 'OrderController@store')->name('order.store');
+    Route::post('category/import', 'CategoryController@import')->name('category.import');
 
     Route::resources([
         'category' => CategoryController::class,

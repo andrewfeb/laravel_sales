@@ -26,7 +26,7 @@ function confirmDelete() {
 			showCancelButton: true,
 			confirmButtonColor: '#3085d6',
 			cancelButtonColor: '#d33',
-			confirmButtonText: 'Hapus',
+			confirmButtonText: 'Ya',
 			cancelButtonText: 'Tidak'
 		}).then((result) => {
 			if (result.value) {

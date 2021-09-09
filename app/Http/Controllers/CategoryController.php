@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Imports\CategoriesImport;
 use Illuminate\Http\Request;
 use DataTables;
+use Excel;
 
 class CategoryController extends Controller
 {
@@ -21,7 +23,7 @@ class CategoryController extends Controller
            return Datatables::of($categories)
                 ->addIndexColumn()
                 ->addColumn('action', function ($category) {
-                    return '<a href="#" class="btn btn-xs btn-warning" data-toggel="modal" onclick="showDetail(&#39;'.route('category.show', [$category->id]).'&#39;)"><i class="fa fa-bars"></i> Detail</a> <a href="'.route('category.edit', [$category->id]).'" class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a> <a href="'.route('category.destroy', [$category->id]).'" class="btn btn-xs btn-danger" data-confirm="Yakin menghapus data ini?"><i class="fa fa-trash"></i> Hapus</a>';
+                    return '<a href="#" class="btn btn-xs btn-warning" onclick="showDetail(&#39;'.route('category.show', [$category->id]).'&#39;)"><i class="fa fa-bars"></i> Detail</a> <a href="'.route('category.edit', [$category->id]).'" class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a> <a href="'.route('category.destroy', [$category->id]).'" class="btn btn-xs btn-danger" data-confirm="Yakin menghapus data ini?"><i class="fa fa-trash"></i> Hapus</a>';
                 })
                 ->toJson();
        }
@@ -155,5 +157,32 @@ class CategoryController extends Controller
         }
 
         return response()->json($status);
+    }
+
+    public function import(Request $request)
+    {
+        $this->validate($request, [
+            'file_import' => 'required|mimes:xls,xlsx'
+        ],[
+            'file_import.required' => 'File import tidak boleh kosong',
+            'mimes' => 'Format file harus xls,xlsx'
+        ]);
+
+        if($request->hasFile('file_import')) {
+            $file = $request->file('file_import');
+
+            Excel::import(new CategoriesImport, $file);
+            $status = [
+                'status' => 'success',
+                'message' => 'Update data kategory berhasil'
+            ];
+        }
+
+        $status = [
+            'status' => 'error',
+            'message' => 'Update data kategory gagal'
+        ];
+
+        return redirect('category')->with($status);
     }
 }
